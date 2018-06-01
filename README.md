@@ -10,7 +10,7 @@ Node provides the RESTful API. Angular provides the frontend and accesses the AP
 
 ## Installation
 
-1. Clone the repository: `git clone git@github.com:Divya0427/node-cars-app`
+1. Clone the repository: `https://github.com/Divya0427/mean-car-poc.git`
 2. Install the application: `npm install`
 3. Place your own MongoDB URI in `config/database.js`
 3. Start the server: `node server.js`
