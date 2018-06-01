@@ -1,50 +1,47 @@
-angular.module('todoController', [])
+angular.module('carController', [])
 
-	// inject the Todo service factory into our controller
-	.controller('mainController', ['$scope','$http','Todos', function($scope, $http, Todos) {
+	// inject the cars service factory into our controller
+	.controller('mainController', ['$scope','$http','CarsFactory', function($scope, $http, CarsFactory) {
 		$scope.formData = {};
 		$scope.loading = true;
+		var carsInfo = [
+	        {
+	            "name": "Ford",
+	            "models": ["Edge", "Escape"]
+	        },
+	        {
+	            "name": "Acura",
+	            "models": ["ILX", "MDX"]
+	        }
+	    ]
 
-		// GET =====================================================================
-		// when landing on the page, get all todos and show them
-		// use the service to get all the todos
-		Todos.get()
-			.success(function(data) {
-				$scope.todos = data;
-				$scope.loading = false;
+		/*
+		//Initially ran this to save data through application
+		CarsFactory.createCars(carsInfo).success(function(data) {
+			console.log("dataAfterCreatingCars::");
+			console.log(data);
+		}).catch(function(err) {
+			console.log("err@creating");
+			console.log(err);
+		});*/
+
+		$scope.handleChange = function(val) {
+			$scope.showCarModels = true;
+			$scope.selectedModel = '';
+			$scope.selectedCar = val;
+			CarsFactory.getCarModels(val).success(function(data) {
+				$scope.models = data && data[0] && data[0].models;
 			});
+		}
 
-		// CREATE ==================================================================
-		// when submitting the add form, send the text to the node API
-		$scope.createTodo = function() {
-
-			// validate the formData to make sure that something is there
-			// if form is empty, nothing will happen
-			if ($scope.formData.text != undefined) {
-				$scope.loading = true;
-
-				// call the create function from our service (returns a promise object)
-				Todos.create($scope.formData)
-
-					// if successful creation, call our get function to get all the new todos
-					.success(function(data) {
-						$scope.loading = false;
-						$scope.formData = {}; // clear the form so our user is ready to enter another
-						$scope.todos = data; // assign our new list of todos
-					});
-			}
-		};
-
-		// DELETE ==================================================================
-		// delete a todo after checking it
-		$scope.deleteTodo = function(id) {
-			$scope.loading = true;
-
-			Todos.delete(id)
-				// if successful creation, call our get function to get all the new todos
-				.success(function(data) {
-					$scope.loading = false;
-					$scope.todos = data; // assign our new list of todos
-				});
-		};
+		$scope.handleModelChange = function(model) {
+			$scope.selectedModel = model;
+		}
+		
+		/*My assignment starts here!!*/
+		CarsFactory.getCars().success(function(data) {
+			$scope.cars = data;
+			$scope.loading = false;
+		})
+		/*My assignment ends here!!*/
 	}]);
